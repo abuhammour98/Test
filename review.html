@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leave a Review · Ahmad IT Help</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --surface:    #1a1d27;
+      --border:     #2a2d3a;
+      --text:       #f0f0f0;
+      --text-dim:   #b0b3c1;
+      --text-muted: #70737f;
+      --blue:       #4f8ef7;
+      --blue-hover: #6fa3ff;
+      --green:      #34d399;
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nav */
+    .nav-wrap {
+      background: rgba(15,17,23,0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .nav-brand {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 60px 24px 80px;
+    }
+
+    .label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px;
+      margin-top: 36px;
+    }
+    @media (max-width: 600px) { .form-card { padding: 28px 20px; } }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-size: 16px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--blue); }
+    .form-input::placeholder { color: var(--text-muted); }
+    textarea.form-input { resize: vertical; min-height: 130px; line-height: 1.6; }
+
+    /* Stars */
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      font-size: 32px;
+      color: #3a3d4a;
+      transition: color 0.15s, transform 0.15s;
+      line-height: 1;
+    }
+    .star-btn:hover, .star-btn.active { color: #f59e0b; transform: scale(1.15); }
+
+    /* Submit button */
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      padding: 15px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .submit-btn:hover { background: var(--blue-hover); transform: translateY(-2px); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Error */
+    .error-box {
+      display: none;
+      color: #f87171;
+      font-size: 15px;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.2);
+      border-radius: 8px;
+    }
+
+    /* Success */
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .success-box.show { display: block; animation: popIn 0.4s ease both; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 24px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-wrap">
+    <div class="nav-inner">
+      <a href="index_4.html" class="back-link">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to main page
+      </a>
+      <span class="nav-brand">Ahmad · IT Help</span>
+    </div>
+  </div>
+
+  <main>
+
+    <div class="label">Leave a Review</div>
+    <h1 style="font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 14px;">
+      How was your experience?
+    </h1>
+    <p style="font-size: 18px; color: var(--text-dim); max-width: 520px;">
+      Worked with me before? Share what happened — it helps other neighbors find trustworthy local IT help.
+    </p>
+
+    <!-- Form card -->
+    <div class="form-card" id="form-card">
+
+      <!-- Stars -->
+      <div style="margin-bottom: 32px;">
+        <span class="form-label">Your rating</span>
+        <div style="display: flex; gap: 4px; margin-top: 6px;">
+          <button class="star-btn" data-val="1" onclick="setRating(1)" title="1 star">★</button>
+          <button class="star-btn" data-val="2" onclick="setRating(2)" title="2 stars">★</button>
+          <button class="star-btn" data-val="3" onclick="setRating(3)" title="3 stars">★</button>
+          <button class="star-btn" data-val="4" onclick="setRating(4)" title="4 stars">★</button>
+          <button class="star-btn" data-val="5" onclick="setRating(5)" title="5 stars">★</button>
+        </div>
+        <input type="hidden" id="review-rating" value="0" />
+      </div>
+
+      <!-- Name + City -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label class="form-label" for="review-name">Your name</label>
+          <input class="form-input" id="review-name" type="text" placeholder="e.g. Margaret L." maxlength="60" />
+        </div>
+        <div>
+          <label class="form-label" for="review-city">City or neighborhood</label>
+          <input class="form-input" id="review-city" type="text" placeholder="e.g. Mission Viejo" maxlength="60" />
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div style="margin-bottom: 28px;">
+        <label class="form-label" for="review-experience">Your experience</label>
+        <textarea class="form-input" id="review-experience" placeholder="What problem did I help you with? How did it go?" maxlength="800"></textarea>
+      </div>
+
+      <!-- Error -->
+      <div class="error-box" id="review-error"></div>
+
+      <!-- Submit -->
+      <button class="submit-btn" id="submit-btn" onclick="submitReview(this)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        Submit Review
+      </button>
+
+      <!-- Success -->
+      <div class="success-box" id="review-success">
+        <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--green); margin-bottom: 16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div style="font-size: 24px; font-weight: 800; margin-bottom: 10px;">Thank you!</div>
+        <div style="font-size: 17px; color: var(--text-dim); max-width: 380px; margin: 0 auto 28px;">Your review has been submitted. Once approved it will appear on the site.</div>
+        <a href="index_4.html" style="color: var(--blue); font-weight: 600; font-size: 16px; text-decoration: none;">← Back to main page</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>&copy; 2026 Ahmad Abu Hammour · Mission Viejo, CA</footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey:            "AIzaSyB5IerCEaGBTSoQ4cK2UG6l9tz5Krg-N78",
+      authDomain:        "ahmad-it-reviews.firebaseapp.com",
+      projectId:         "ahmad-it-reviews",
+      storageBucket:     "ahmad-it-reviews.firebasestorage.app",
+      messagingSenderId: "802514532138",
+      appId:             "1:802514532138:web:53146e1146180f867ed053"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function setRating(val) {
+      document.getElementById('review-rating').value = val;
+      document.querySelectorAll('.star-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
+      });
+    }
+
+    async function submitReview(btn) {
+      const name       = document.getElementById('review-name').value.trim();
+      const city       = document.getElementById('review-city').value.trim();
+      const experience = document.getElementById('review-experience').value.trim();
+      const rating     = parseInt(document.getElementById('review-rating').value) || 0;
+
+      document.getElementById('review-error').style.display = 'none';
+      if (!name)        { showErr('Please enter your name.'); return; }
+      if (!city)        { showErr('Please enter your city or neighborhood.'); return; }
+      if (rating === 0) { showErr('Please select a star rating.'); return; }
+      if (!experience)  { showErr('Please share a bit about your experience.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        await db.collection('reviews').add({
+          name, city, rating, experience,
+          status: 'pending',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        document.getElementById('form-card').querySelector('.submit-btn').style.display = 'none';
+        const success = document.getElementById('review-success');
+        success.classList.add('show');
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (err) {
+        showErr('Something went wrong — please try again.');
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg> Submit Review`;
+        console.error(err);
+      }
+    }
+
+    function showErr(msg) {
+      const el = document.getElementById('review-error');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
