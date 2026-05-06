@@ -373,6 +373,71 @@
     @media (min-width: 701px) and (max-width: 900px) {
       .grid-3 { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ── Side nav (desktop) / Bottom nav (mobile) ── */
+    .side-nav {
+      position: fixed;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(26,29,39,0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 8px;
+    }
+    .side-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+    }
+    .side-nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-dim); }
+    .side-nav-item.active { background: rgba(79,142,247,0.14); color: var(--blue); }
+    .side-nav-item svg { flex-shrink: 0; }
+    /* Hide text when there isn't enough room beside the centered content */
+    @media (max-width: 1160px) {
+      .side-nav-item span { display: none; }
+      .side-nav { right: 10px; }
+      .side-nav-item { padding: 10px 10px; }
+    }
+    /* Mobile: bottom tab bar */
+    @media (max-width: 700px) {
+      body { padding-bottom: 68px; }
+      .side-nav {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        top: auto; transform: none;
+        flex-direction: row;
+        justify-content: space-around;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--border);
+        padding: 6px 4px env(safe-area-inset-bottom, 0);
+        gap: 0;
+        background: rgba(15,17,23,0.97);
+      }
+      .side-nav-item {
+        flex-direction: column;
+        gap: 3px;
+        padding: 7px 10px;
+        font-size: 10px;
+        align-items: center;
+        border-radius: 10px;
+      }
+      .side-nav-item span { display: block !important; }
+    }
   </style>
 </head>
 <body>
@@ -392,6 +457,38 @@
     </div>
   </div>
 
+  <!-- ── SIDE / BOTTOM NAV ────────────────────────────────────── -->
+  <nav class="side-nav" id="side-nav">
+    <a href="#top" class="side-nav-item active" data-target="top">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#services" class="side-nav-item" data-target="services">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span>Services</span>
+    </a>
+    <a href="#area" class="side-nav-item" data-target="area">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span>Service Area</span>
+    </a>
+    <a href="#how" class="side-nav-item" data-target="how">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+      <span>How It Works</span>
+    </a>
+    <a href="#about" class="side-nav-item" data-target="about">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <span>About</span>
+    </a>
+    <a href="#faq" class="side-nav-item" data-target="faq">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span>FAQ</span>
+    </a>
+    <a href="#contact" class="side-nav-item" data-target="contact">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      <span>Contact</span>
+    </a>
+  </nav>
+
   <!-- ── HERO ─────────────────────────────────────────────────── -->
   <div id="top" class="hero-wrap">
     <div class="hero-glow"></div>
@@ -403,7 +500,7 @@
       </div>
 
       <h1 class="hero-title">
-        Local IT support for<br/><span>everyone</span><br/>in Mission Viejo.
+        Local IT support for <span>everyone</span> in Mission Viejo.
       </h1>
 
       <p class="hero-sub">
@@ -411,11 +508,12 @@
       </p>
 
       <div class="hero-btns">
-        <a href="#contact" class="btn-big btn-blue">
-          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          Contact Me Today
+        <!-- TODO: Replace 0000000000 with your actual 10-digit phone number -->
+        <a href="tel:+10000000000" class="btn-big btn-blue">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          Call Me Now
         </a>
-        <a href="#services" class="btn-big btn-outline">See What I Fix</a>
+        <a href="#contact" class="btn-big btn-outline">Email Me</a>
       </div>
 
       <div class="trust-bar">
@@ -593,6 +691,31 @@
       <strong style="color: var(--text);">Don't see your problem listed?</strong> Reach out anyway — if it's tech-related, there's a good chance I can help.
       <a href="#contact" style="color: var(--blue); margin-left: 6px; text-decoration: none; font-weight: 600;">Ask me →</a>
     </div>
+
+    <!-- Service Area sub-section -->
+    <div id="area" style="margin-top: 56px;">
+      <div class="label">Service Area</div>
+      <h3 style="font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px;">Serving all of south Orange County</h3>
+      <p style="color: var(--text-dim); font-size: 17px; max-width: 560px; margin-bottom: 28px;">I come to you — at your home or office. Here's everywhere I cover:</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Mission Viejo</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Rancho Santa Margarita</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Lake Forest</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Aliso Viejo</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Laguna Hills</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Laguna Niguel</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Laguna Beach</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Laguna Woods</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Coto de Caza</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Ladera Ranch</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Dana Point</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>San Juan Capistrano</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>San Clemente</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Trabuco Canyon</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Foothill Ranch</div>
+        <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-dim);"><svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--blue);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Portola Hills</div>
+      </div>
+    </div>
   </div>
 
   <hr class="divider" />
@@ -609,7 +732,7 @@
         <div class="step-num">1</div>
         <div>
           <div style="font-size: 20px; font-weight: 700; margin-bottom: 6px;">You reach out</div>
-          <div style="font-size: 17px; color: var(--text-dim);">Send me an email or message describing what's wrong. You don't need to know the technical details — just tell me what's happening in your own words.</div>
+          <div style="font-size: 17px; color: var(--text-dim);">Call or email me and describe what's wrong. You don't need to know the technical details — just tell me what's happening in your own words.</div>
         </div>
       </div>
 
@@ -633,20 +756,29 @@
 
     <!-- Pricing callout -->
     <div style="margin-top: 36px; padding: 32px 36px; background: rgba(79,142,247,0.06); border: 1px solid rgba(79,142,247,0.2); border-radius: 16px; max-width: 700px;">
-      <div style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Simple, honest pricing</div>
-      <div style="font-size: 17px; color: var(--text-dim); margin-bottom: 20px;">
-        Starting at <strong style="color: var(--text);">$40/hour</strong> for most jobs. Flat rates available for common fixes.<br/>
-        Ongoing support packages available for local businesses.<br/>
-        <strong style="color: var(--green);">The first consultation call is always free.</strong>
+      <div style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">Simple, honest pricing</div>
+      <div style="margin-bottom: 16px;">
+        <div style="display: inline-block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 28px; margin-bottom: 16px;">
+          <div style="font-size: 32px; font-weight: 800; color: var(--text);">$75<span style="font-size:16px; font-weight:500; color:var(--text-dim);">/hour</span></div>
+          <div style="font-size: 14px; color: var(--text-dim); margin-top: 4px;">One-hour minimum · No hidden fees</div>
+        </div>
       </div>
-      <a href="#contact" class="btn-big btn-blue" style="font-size: 16px; padding: 13px 26px; display: inline-flex;">Get a Free Quote</a>
+      <div style="font-size: 15px; color: var(--text-dim); margin-bottom: 20px;">
+        Ongoing support packages available for local businesses.<br/>
+        <strong style="color: var(--green);">Free 15-minute phone consultation — always.</strong>
+      </div>
+      <!-- TODO: Replace 0000000000 with your actual 10-digit phone number -->
+      <a href="tel:+10000000000" class="btn-big btn-blue" style="font-size: 16px; padding: 13px 26px; display: inline-flex;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+        Call for a Free Quote
+      </a>
     </div>
   </div>
 
   <hr class="divider" />
 
   <!-- ── ABOUT / TRUST ──────────────────────────────────────────── -->
-  <div class="section">
+  <div id="about" class="section">
     <div class="label">About Me</div>
     <h2 style="font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 40px;">You're in good hands</h2>
 
@@ -667,8 +799,8 @@
           <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--blue);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
         </div>
         <div>
-          <div style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">Highly educated</div>
-          <div style="font-size: 16px; color: var(--text-dim);">I hold two Master's degrees — one in Information Technology and one in Computer Science — both with a perfect 4.0 GPA.</div>
+          <div style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">2 Mastrer degrees in IT &amp; Computer Science</div>
+          <div style="font-size: 16px; color: var(--text-dim);">I hold two master degrees in both Information Technology and Computer Science, giving me deep knowledge across the full spectrum of modern tech.</div>
         </div>
       </div>
 
@@ -695,7 +827,7 @@
     </div>
   </div>
 
-  <hr class="divider" />
+  <hr class="divider" id="reviews-divider" />
 
   <!-- ── TESTIMONIALS ──────────────────────────────────────────── -->
   <div id="reviews" class="section">
@@ -724,6 +856,48 @@
 
   <hr class="divider" />
 
+  <!-- ── FAQ ──────────────────────────────────────────────────── -->
+  <div id="faq" class="section">
+    <div class="label">FAQ</div>
+    <h2 style="font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 40px;">Common questions</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 16px; max-width: 700px;">
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Is the first consultation really free?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">Yes — always. I'll do a free 15-minute call to understand your problem and give you an honest estimate before any commitment.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">What if you can't fix it?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">If I can't fix your problem, you don't pay. I'll always be upfront about what's possible before I start, so there are no surprises.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Do you work on both Macs and PCs?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">Yes — I work on Windows and macOS computers, as well as iPhones, Android phones, and tablets. If it has a screen and a power button, I can likely help.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Will you install something I already bought?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">Absolutely. Printers, routers, smart TVs, external drives — if you bought it and need it set up, I'll come install and configure it for you.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Do you work on weekends?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">Yes. I offer flexible scheduling including evenings and weekends — because tech problems don't keep business hours.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">What cities do you serve?</div>
+        <div style="font-size: 16px; color: var(--text-dim);">I serve all of south Orange County — Mission Viejo, Rancho Santa Margarita, Lake Forest, Aliso Viejo, Laguna Hills, Laguna Niguel, Laguna Beach, Laguna Woods, Coto de Caza, Ladera Ranch, Dana Point, San Juan Capistrano, San Clemente, Trabuco Canyon, Foothill Ranch, and Portola Hills. Not sure if you're in range? Just ask.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider" />
+
   <!-- ── CONTACT ────────────────────────────────────────────────── -->
   <div id="contact" class="section">
     <div class="contact-box">
@@ -731,27 +905,32 @@
       <div class="label" style="margin-bottom: 20px;">Get in Touch</div>
       <h2 style="font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px;">Ready to get your tech fixed?</h2>
       <p style="font-size: 18px; color: var(--text-dim); max-width: 500px; margin: 0 auto 36px;">
-        Send me an email and describe what's going on. I'll get back to you quickly — usually within a few hours.
-        <br/><strong style="color: var(--green);">First consultation is free.</strong>
+        Call or email — describe what's going on and I'll get back to you fast.
+        <br/><strong style="color: var(--green);">Free 15-minute phone consultation.</strong>
       </p>
 
-      <a href="mailto:ahmad.abuhammour98@gmail.com" class="contact-email">
-        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        ahmad.abuhammour98@gmail.com
-      </a>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 0;">
+        <!-- TODO: Replace 0000000000 with your actual 10-digit phone number -->
+        <a href="tel:+10000000000" class="contact-email">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          (858) 568-2880 
+        </a>
+        <a href="mailto:ahmad.abuhammour98@gmail.com" class="contact-email">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          ahmad.abuhammour98@gmail.com
+        </a>
+      </div>
 
-      <div style="margin-top: 36px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; justify-content: center; gap: 28px;">
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text-dim);">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--blue); flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          Mission Viejo, CA &amp; surrounding cities
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text-dim);">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--green); flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Usually responds within a few hours
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text-dim);">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--green); flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-          Same-day visits available
+      <div style="margin-top: 36px; padding-top: 32px; border-top: 1px solid var(--border);">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 28px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text-dim);">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--green); flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Usually responds within a few hours
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text-dim);">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--green); flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            Same-day visits available
+          </div>
         </div>
       </div>
 
@@ -817,7 +996,12 @@
           .get();
         loading.style.display = 'none';
         const approved = snap.docs.filter(d => d.data().status === 'approved');
-        if (approved.length === 0) { empty.style.display = 'block'; return; }
+        if (approved.length === 0) {
+          document.getElementById('reviews').style.display = 'none';
+          document.getElementById('reviews-divider').style.display = 'none';
+          document.querySelector('a[href="#reviews"]')?.parentElement?.style.setProperty('display','none');
+          return;
+        }
         grid.style.display = 'grid';
         approved.forEach(doc => { grid.innerHTML += reviewCard(doc.data()); });
       } catch (err) {
@@ -880,6 +1064,20 @@
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.card, .contact-box, .hero-inner').forEach(el => observer.observe(el));
+
+    // ── Side-nav scroll spy ──────────────────────────────────────────────────
+    const navSections = ['top','services','area','how','about','faq','contact'];
+    const navItems = document.querySelectorAll('.side-nav-item');
+    const setActive = (id) => {
+      navItems.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    };
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+    navSections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) spyObserver.observe(el);
+    });
   </script>
 </body>
 </html>
